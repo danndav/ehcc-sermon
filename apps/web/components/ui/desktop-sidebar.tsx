@@ -2,7 +2,6 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Home, Play, Heart, Layers, Mic, Bookmark, Clock, FileText } from 'lucide-react';
 
 const mainNav = [

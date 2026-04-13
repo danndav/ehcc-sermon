@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Image from 'next/image';
+import { getImagePath } from '@/lib/utils';
 import { MOCK_PASTORS } from '@/lib/mock-data';
 
 export default function SpeakersPage() {
@@ -12,11 +12,9 @@ export default function SpeakersPage() {
             <div className="bg-white border border-black/10 rounded-xl p-4 text-center hover:border-black/20 transition-colors">
               {pastor.photoUrl ? (
                 <div className="w-16 h-16 rounded-full mx-auto mb-3 overflow-hidden">
-                  <Image
-                    src={pastor.photoUrl}
+                  <img
+                    src={getImagePath(pastor.photoUrl)}
                     alt={pastor.name}
-                    width={64}
-                    height={64}
                     className="w-full h-full object-cover"
                   />
                 </div>
