@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { ArrowLeft } from 'lucide-react';
+import { img } from '@/lib/utils';
 import { SermonCard } from '@/components/sermon/sermon-card';
 import { MOCK_PASTORS, MOCK_SERMONS } from '@/lib/mock-data';
 
@@ -23,11 +23,9 @@ export default function SpeakerDetailPage({ params }: { params: { id: string } }
       <div className="flex items-start gap-4 mb-6">
         {pastor.photoUrl ? (
           <div className="w-20 h-20 rounded-full overflow-hidden shrink-0">
-            <Image
-              src={pastor.photoUrl}
+            <img
+              src={img(pastor.photoUrl)}
               alt={pastor.name}
-              width={80}
-              height={80}
               className="w-full h-full object-cover"
             />
           </div>

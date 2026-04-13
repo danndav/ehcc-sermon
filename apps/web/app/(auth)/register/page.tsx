@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import { img } from '@/lib/utils';
 
 export default function RegisterPage() {
   const [name, setName] = useState('');
@@ -15,7 +15,7 @@ export default function RegisterPage() {
     <div className="w-full max-w-sm px-6">
       <div className="text-center mb-8">
         <div className="w-16 h-16 rounded-full bg-[#4A1572] flex items-center justify-center mx-auto mb-3">
-          <Image src="/images/ehcc-logo.png" alt="EHCC" width={40} height={40} className="h-10 w-auto" />
+          <img src={img("/images/ehcc-logo.png")} alt="EHCC" className="h-10 w-auto" />
         </div>
         <p className="text-[13px] text-text-secondary">Create your account</p>
       </div>

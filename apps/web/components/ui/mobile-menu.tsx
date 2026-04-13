@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
+import { img } from '@/lib/utils';
 import {
   X,
   Home,
@@ -94,7 +94,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         <div className="flex items-center justify-between px-4 py-3 border-b border-black/[0.06]">
           <Link href="/home" onClick={onClose} className="flex items-center gap-2">
             <div className="w-9 h-9 rounded-full bg-[#4A1572] flex items-center justify-center shrink-0">
-              <Image src="/images/ehcc-logo.png" alt="EHCC" width={24} height={24} className="h-6 w-auto" />
+              <img src={img("/images/ehcc-logo.png")} alt="EHCC" className="h-6 w-auto" />
             </div>
           </Link>
           <button
