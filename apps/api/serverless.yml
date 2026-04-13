@@ -1,0 +1,103 @@
+org: ehcc
+app: ehcc-plus
+service: ehcc-plus-api
+
+package:
+  individually: true
+  patterns:
+    - '!node_modules/.prisma/client/libquery_engine-*'
+    - 'node_modules/.prisma/client/libquery_engine-rhel-*'
+    - '!node_modules/prisma/libquery_engine-*'
+    - '!node_modules/@prisma/engines/**'
+    - '!.git/**'
+    - '!.github/**'
+    - '!test/**'
+
+plugins:
+  - serverless-webpack
+  - serverless-lift
+  - serverless-offline
+  - serverless-plugin-aws-alerts
+  - serverless-dotenv-plugin
+build:
+  esbuild: false
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  stage: ${opt:stage, 'staging'}
+  iam:
+    role:
+      statements:
+        - Effect: 'Allow'
+          Action:
+            - 's3:PutObject'
+            - 's3:PutObjectAcl'
+            - 's3:GetObject'
+            - 's3:DeleteObject'
+          Resource: { 'Fn::Sub': 'arn:aws:s3:::${env:AWS_ASSETS_BUCKET_NAME}/*' }
+  environment:
+    NODE_ENV: ${self:provider.stage}
+    JWT_SECRET: ${env:JWT_SECRET, ''}
+    TYPEORM_URL: ${env:TYPEORM_URL, ''}
+    ADMIN_API_KEY: ${env:ADMIN_API_KEY, ''}
+    PAYSTACK_SECRET_KEY: ${env:PAYSTACK_SECRET_KEY, ''}
+    BUNNY_API_KEY: ${env:BUNNY_API_KEY, ''}
+    BUNNY_STORAGE_ZONE: ${env:BUNNY_STORAGE_ZONE, ''}
+    BUNNY_CDN_HOSTNAME: ${env:BUNNY_CDN_HOSTNAME, ''}
+    BUNNY_TOKEN_AUTH_KEY: ${env:BUNNY_TOKEN_AUTH_KEY, ''}
+    ASSEMBLYAI_API_KEY: ${env:ASSEMBLYAI_API_KEY, ''}
+    ANTHROPIC_API_KEY: ${env:ANTHROPIC_API_KEY, ''}
+    RESEND_API_KEY: ${env:RESEND_API_KEY, ''}
+    RESEND_FROM_EMAIL: ${env:RESEND_FROM_EMAIL, ''}
+    AWS_BUCKET_REGION: ${env:AWS_BUCKET_REGION, ''}
+    AWS_ASSETS_BUCKET_NAME: ${env:AWS_ASSETS_BUCKET_NAME, ''}
+  logRetentionInDays: ${env:SERVERLESS_LOG_RETENTION_IN_DAYS, '180'}
+  tracing:
+    lambda: true
+
+functions:
+  app:
+    handler: src/index.handler
+    events:
+      - http:
+          path: /api/v1/
+          method: ANY
+          cors: true
+      - http:
+          method: ANY
+          path: /api/v1/{proxy+}
+          cors: true
+
+custom:
+  prune:
+    automatic: true
+    number: 4
+  alerts:
+    alarms:
+      - functionThrottles
+      - functionErrors
+      - functionInvocations
+    stages:
+      - production
+      - staging
+      - dev
+    dashboards: true
+  webpack:
+    excludeRegex: '(node_modules/@aws-sdk)|(.yarn)'
+    includeModules:
+      forceInclude:
+        - pg
+      forceExclude:
+        - '@aws-sdk/types'
+        - '@aws-sdk/client-sqs'
+    webpackConfig: 'webpack.config.js'
+    packager: 'yarn'
+    packagerOptions:
+      noFrozenLockfile: true
+    concurrency: 1
+  serverless-offline:
+    lambdaPort: 3002
+    httpPort: 3005
+    host: 127.0.0.1

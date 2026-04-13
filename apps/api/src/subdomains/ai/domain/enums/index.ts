@@ -1,0 +1,1 @@
+// AI subdomain enums

@@ -1,0 +1,50 @@
+# directories
+node_modules
+build
+dist
+coverage
+.build/
+.jest-cache
+.serverless
+.webpackCache
+.webpack
+.jest-cache
+.dynamodb
+.idea
+.fleet
+.npmrc
+.vscode
+# files
+.DS_Store
+.env
+*.log
+.force_preinstall
+
+#Structurizr
+.structurizr/
+.adr-dir
+Architecture/.tmp
+Architecture/workspace.json
+
+# personal extension configs
+restore-terminals.json
+
+**/.yarn/**
+!.yarn/releases/
+!.yarn/releases/**
+!.yarn/plugins/
+!.yarn/plugins/**
+
+.history/
+.aider*
+
+venv/
+
+# Next.js
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# files.zip
+files.zip
