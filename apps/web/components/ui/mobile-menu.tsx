@@ -11,6 +11,7 @@ import {
   Heart,
   Layers,
   Mic,
+  GraduationCap,
   Bookmark,
   Clock,
   FileText,
@@ -27,6 +28,7 @@ const mainNav = [
   { name: 'Prayer Room', href: '/prayer', icon: Heart },
   { name: 'Series', href: '/series', icon: Layers },
   { name: 'Speakers', href: '/speakers', icon: Mic },
+  { name: 'Classes', href: '/classes', icon: GraduationCap },
   { name: 'Give', href: '/give', icon: PlusCircle },
 ];
 

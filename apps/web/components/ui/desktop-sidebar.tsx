@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Home, Play, Heart, Layers, Mic, Bookmark, Clock, FileText } from 'lucide-react';
+import { Home, Play, Heart, Layers, Mic, GraduationCap, Bookmark, Clock, FileText } from 'lucide-react';
 
 const mainNav = [
   { name: 'Home', href: '/home', icon: Home },
@@ -10,6 +10,7 @@ const mainNav = [
   { name: 'Prayer Room', href: '/prayer', icon: Heart },
   { name: 'Series', href: '/series', icon: Layers },
   { name: 'Speakers', href: '/speakers', icon: Mic },
+  { name: 'Classes', href: '/classes', icon: GraduationCap },
 ];
 
 const libraryNav = [
