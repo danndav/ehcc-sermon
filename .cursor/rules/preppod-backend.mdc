@@ -1,0 +1,344 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Preppod Backend Development Guide
+
+## Project Structure and Architecture
+
+### Domain-Driven Design (DDD) Implementation
+- Follow Domain-Driven Design principles
+- Organize code into bounded contexts and subdomains
+- Use ubiquitous language throughout the codebase
+- Implement rich domain models with business logic
+
+### Subdomain Structure
+```
+src/subdomains/
+├── {subdomain-name}/
+│   ├── api/                    # API layer (controllers, DTOs, middleware)
+│   ├── application/            # Application layer (services, factories)
+│   ├── infrastructure/         # Infrastructure layer (repositories, external services)
+│   ├── domains/                # Domain layer (entities, value objects, enums)
+│   └── {subdomain-name}.module.ts
+```
+
+### Creating a New Subdomain
+1. Create the subdomain directory structure
+2. Implement layers in order:
+   - Domain (entities, enums, interfaces)
+   - Infrastructure (repositories, external services)
+   - Application (services, factories)
+   - API (controllers, DTOs)
+3. Create the subdomain module
+4. Register in the root module
+
+### Layer Responsibilities
+
+#### Domain Layer
+- Define core business entities and value objects
+- Implement domain logic and business rules
+- Define interfaces for repositories
+- Create enums and constants
+- No external dependencies
+
+#### Infrastructure Layer
+- Implement repository interfaces
+- Handle database operations
+- Manage external service integrations
+- Implement caching mechanisms
+- Handle file storage and retrieval
+
+#### Application Layer
+- Implement use cases and business logic
+- Coordinate between domain and infrastructure
+- Handle transactions and unit of work
+- Implement factories for domain objects
+- Manage application services
+
+#### API Layer
+- Define REST controllers
+- Handle request/response mapping
+- Implement middleware
+- Define DTOs for input/output
+- Handle authentication and authorization
+
+### Module Integration
+```typescript
+// Root module example
+@Module({
+  imports: [
+    SubdomainModule,
+    // Other modules
+  ],
+})
+export class AppModule {}
+```
+
+## Testing Guidelines
+
+### Test Structure
+```
+src/subdomains/{subdomain-name}/
+├── api/
+│   ├── rest/
+│   │   ├── dto/
+│   │   │   ├── input/
+│   │   │   │   └── __mocks__/        # Mock DTOs for input
+│   │   │   └── output/
+│   │   │       └── __mocks__/        # Mock DTOs for output
+│   │   └── controllers/
+│   │       └── __tests__/            # Controller tests
+├── application/
+│   ├── factories/
+│   │   └── __tests__/                # Factory tests
+│   ├── services/
+│   │   └── __tests__/                # Service tests
+│   └── __tests__/                    # Application layer tests
+├── domains/
+│   ├── entities/
+│   │   └── __mocks__/                # Entity mocks
+│   ├── enums/
+│   │   └── __tests__/                # Enum tests
+│   └── __tests__/                    # Domain layer tests
+└── infrastructure/
+    ├── repositories/
+    │   └── __tests__/                # Repository tests
+    └── __tests__/                    # Infrastructure layer tests
+```
+
+### Test File Naming Convention
+- Test files should be named with `.test.ts` or `.spec.ts` suffix
+- Mock files should be placed in `__mocks__` directories
+- Test files should mirror the structure of the source files
+
+### Mock Structure
+- Create mock classes for entities and DTOs
+- Use static factory methods for creating mock instances
+- Include default values and allow overrides
+- Group related mocks in `__mocks__` directories
+
+Example mock structure:
+```typescript
+// src/subdomains/{subdomain}/domains/entities/__mocks__/entity.mock.ts
+export class EntityMock {
+  static create(overrides: Partial<Entity> = {}): Entity {
+    const entity = new Entity();
+    // Set default values
+    Object.assign(entity, overrides);
+    return entity;
+  }
+}
+
+// src/subdomains/{subdomain}/api/rest/dto/input/__mocks__/dto.mock.ts
+export class DtoMock {
+  static create(overrides: Partial<Dto> = {}): Dto {
+    const dto = new Dto();
+    // Set default values
+    Object.assign(dto, overrides);
+    return dto;
+  }
+}
+```
+
+### Test Categories
+
+1. Unit Tests
+   - Test individual components in isolation
+   - Use mocks for dependencies
+   - Focus on business logic
+   - Use Jest/Testing Library
+   - Follow the pattern:
+     ```typescript
+     describe('Component', () => {
+       describe('method', () => {
+         it('should do something', () => {
+           // Test implementation
+         });
+       });
+     });
+     ```
+
+2. Integration Tests
+   - Test component interactions
+   - Use test database
+   - Test repository operations
+   - Verify service integration
+   - Include transaction management tests
+
+3. E2E Tests
+   - Test complete workflows
+   - Use test environment
+   - Verify API endpoints
+   - Test authentication flow
+   - Include error scenarios
+
+### Test Coverage
+- Aim for high coverage of business logic
+- Focus on critical paths
+- Include edge cases
+- Test error scenarios
+- Document test cases
+
+## Database Migrations
+
+### Migration Structure
+```
+src/aop/db/migrations/
+├── {timestamp}_{migration-name}.ts
+```
+
+### Creating Migrations
+1. Use TypeORM migration commands
+2. Follow naming convention: `{timestamp}_{description}`
+3. Include up and down methods
+4. Document schema changes
+5. Ensure the timestamp is the latest
+
+### Migration Best Practices
+- Keep migrations atomic
+- Include rollback methods
+- Test migrations in development
+- Document schema changes
+- Use transactions for data migrations
+
+## Code Style and Patterns
+
+### Naming Conventions
+- Use PascalCase for classes and interfaces
+- Use camelCase for methods and variables
+- Use UPPER_SNAKE_CASE for constants
+- Use kebab-case for file names
+
+### File Organization
+- One class per file
+- Group related files in directories
+- Use index.ts for exports
+- Follow layer separation
+
+### Dependency Injection
+- Use constructor injection
+- Follow SOLID principles
+- Implement interfaces for services
+- Use module providers
+
+### Error Handling
+- Use custom exceptions
+- Implement error middleware
+- Log errors appropriately
+- Return meaningful error messages
+
+### Logging
+- Use structured logging
+- Include context information
+- Log at appropriate levels
+- Implement request tracing
+
+## Security Guidelines
+
+### Authentication
+- Use JWT for authentication
+- Implement refresh tokens
+- Secure sensitive endpoints
+- Validate user permissions
+
+### Authorization
+- Use role-based access control
+- Implement permission checks
+- Validate user context
+- Secure sensitive operations
+
+### Data Protection
+- Encrypt sensitive data
+- Validate input data
+- Sanitize output data
+- Implement rate limiting
+
+## Performance Optimization
+
+### Database
+- Use appropriate indexes
+- Optimize queries
+- Implement caching
+- Use connection pooling
+
+### API
+- Implement response compression
+- Use pagination
+- Cache responses
+- Optimize payload size
+
+### Application
+- Use async/await properly
+- Implement proper error handling
+- Use appropriate data structures
+- Optimize memory usage
+
+## Documentation
+
+### Code Documentation
+- Use JSDoc comments
+- Document public APIs
+- Include examples
+- Document error cases
+
+### API Documentation
+- Use Swagger/OpenAPI
+- Document endpoints
+- Include request/response examples
+- Document authentication requirements
+
+### Architecture Documentation
+- Document system design
+- Include sequence diagrams
+- Document data flow
+- Update documentation regularly
+
+## Deployment and CI/CD
+
+### Environment Configuration
+- Use environment variables
+- Implement configuration validation
+- Use different configs per environment
+- Secure sensitive data
+
+### CI/CD Pipeline
+- Implement automated testing
+- Run code quality checks
+- Deploy to staging
+- Monitor deployment
+
+### Monitoring
+- Implement health checks
+- Monitor performance metrics
+- Track error rates
+- Set up alerts
+
+## Version Control
+
+### Branch Strategy
+- Use feature branches
+- Implement pull requests
+- Follow semantic versioning
+- Maintain changelog
+
+### Code Review
+- Review for security
+- Check code quality
+- Verify tests
+- Ensure documentation
+
+## Maintenance
+
+### Code Quality
+- Run linters
+- Check code coverage
+- Monitor technical debt
+- Refactor when needed
+
+### Updates
+- Keep dependencies updated
+- Monitor security advisories
+- Plan for breaking changes
+- Test updates thoroughly 
