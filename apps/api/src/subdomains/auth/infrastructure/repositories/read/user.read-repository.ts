@@ -12,23 +12,32 @@ export class UserReadRepository {
   ) {}
 
   async findByEmail(email: string): Promise<UserReadModel | null> {
-    const user = await this.userRepository
-      .createQueryBuilder('users')
-      .select([
-        'users.id AS "id"',
-        'users.name AS "name"',
-        'users.email AS "email"',
-        'users.avatar_url AS "avatarUrl"',
-        'users.role AS "role"',
-        'users.is_email_verified AS "isEmailVerified"',
-        'users.is_suspended AS "isSuspended"',
-        'users.created_at AS "createdAt"',
-        'users.updated_at AS "updatedAt"',
-      ])
-      .where('users.email = :email', { email })
-      .andWhere('users.deleted_at IS NULL')
-      .getRawOne();
+    const user = await this.userRepository.findOne({ where: { email } });
+    if (!user) return null;
+    return this.toReadModel(user);
+  }
 
-    return user ?? null;
+  async findByEaNumber(eaNumber: string): Promise<UserReadModel | null> {
+    const user = await this.userRepository.findOne({ where: { eaNumber } });
+    if (!user) return null;
+    return this.toReadModel(user);
+  }
+
+  private toReadModel(user: User): UserReadModel {
+    return {
+      id: user.id,
+      eaNumber: user.eaNumber,
+      name: user.name,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      avatarUrl: user.avatarUrl,
+      role: user.role,
+      isVerified: user.isVerified,
+      isSuspended: user.isSuspended,
+      passwordSet: user.passwordSet,
+      branchId: user.branchId,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
   }
 }

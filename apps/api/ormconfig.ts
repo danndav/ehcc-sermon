@@ -13,7 +13,7 @@ export default new DataSource({
   synchronize: false,
   type: 'postgres',
   url: process.env.TYPEORM_URL,
-  ssl: process.env.NODE_ENV === 'local' ? false : {
-    rejectUnauthorized: false
-  }
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });

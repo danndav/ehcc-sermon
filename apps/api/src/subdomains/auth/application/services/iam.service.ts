@@ -12,7 +12,7 @@ export class IamService {
     return this.userReadRepository.findByEmail(email);
   }
 
-  async findUserByPhone(phone: string): Promise<UserReadModel | null> {
-    return this.userReadRepository.findByPhone(phone);
+  async findUserByEaNumber(eaNumber: string): Promise<UserReadModel | null> {
+    return this.userReadRepository.findByEaNumber(eaNumber);
   }
 }
