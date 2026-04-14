@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Tag, FolderOpen, Link as LinkIcon, MoreHorizontal, Trash2, Clock } from 'lucide-react';
+import { ArrowLeft, Tag, FolderOpen, MoreHorizontal, Clock } from 'lucide-react';
+import { FormattingToolbar } from '@/components/notes/formatting-toolbar';
 
 export default function NoteEditor({ id }: { id: string }) {
   const isNew = id === 'new';
@@ -11,18 +12,18 @@ export default function NoteEditor({ id }: { id: string }) {
 
 The disciples panicked, but Jesus slept. His peace was not dependent on circumstances.
 
-## Key takeaways
+Key takeaways
 
 1. **Peace is a Person** — Jesus IS our peace. It's not something we achieve, it's Someone we know.
 2. **Storms reveal faith** — The storm didn't create their fear, it revealed it. What does your current storm reveal about your faith?
 3. **He speaks to storms** — Jesus didn't fight the storm. He spoke to it. There's authority in His words.
 
-## Scripture references
+Scripture references
 - Mark 4:35-41
 - Isaiah 26:3 — "You will keep in perfect peace those whose minds are steadfast"
 - Philippians 4:6-7
 
-## Personal reflection
+Personal reflection
 I've been anxious about the job situation. But this sermon reminded me that God is not asleep. He's on the boat with me. I need to trust His timing.
 
 #peace #faith #sermon`);
@@ -63,6 +64,9 @@ I've been anxious about the job situation. But this sermon reminded me that God 
             <Clock size={10} className="inline mr-0.5" />
             {isNew ? 'New note' : 'Edited 10:30 AM'}
           </span>
+          <button className="bg-[#4A1572] text-white rounded-lg px-3 py-1 text-[12px] font-medium hover:opacity-90 transition-all">
+            Save
+          </button>
           <button className="text-text-tertiary hover:text-text-primary">
             <MoreHorizontal size={18} />
           </button>
@@ -96,9 +100,12 @@ I've been anxious about the job situation. But this sermon reminded me that God 
               </select>
             </div>
           </div>
-          <p className="text-[10px] text-text-tertiary mt-2">Tip: Add #tags anywhere in your note and they&apos;ll be detected automatically</p>
+          <p className="text-[10px] text-text-tertiary mt-2">Tip: Type # followed by a word to add tags to your note</p>
         </div>
       )}
+
+      {/* Formatting toolbar */}
+      <FormattingToolbar textareaId="note-content" content={content} onContentChange={setContent} />
 
       {/* Editor */}
       <div className="flex-1 overflow-y-auto">
@@ -108,48 +115,18 @@ I've been anxious about the job situation. But this sermon reminded me that God 
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Note title..."
+            placeholder="Give your note a title..."
             className="w-full text-[20px] font-medium text-text-primary placeholder:text-text-tertiary focus:outline-none mb-4"
           />
 
-          {/* Templates (new note only) */}
-          {isNew && !content && (
-            <div className="mb-6">
-              <p className="text-[12px] text-text-tertiary mb-2">Start from a template:</p>
-              <div className="flex gap-2 flex-wrap">
-                {[
-                  { name: 'Sermon notes', template: '## Sermon: \n## Speaker: \n## Date: \n\n## Key points\n\n1. \n2. \n3. \n\n## Scripture references\n\n- \n\n## Personal takeaway\n\n\n\n#sermon' },
-                  { name: 'Prayer journal', template: '## Prayer — ' + new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) + '\n\n### Thanksgiving\n\n\n### Requests\n\n\n### Declarations\n\n\n#prayer' },
-                  { name: 'Bible study', template: '## Passage: \n\n### Context\n\n\n### Key verses\n\n> \n\n### Observations\n\n\n### Application\n\n\n#bible-study' },
-                  { name: 'Daily note', template: '## ' + new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' }) + '\n\n### Morning thoughts\n\n\n### Today I\'m grateful for\n\n1. \n2. \n3. \n\n### Reflections\n\n\n#daily' },
-                ].map((t) => (
-                  <button
-                    key={t.name}
-                    onClick={() => setContent(t.template)}
-                    className="px-3 py-1.5 rounded-lg text-[12px] border border-black/10 text-text-secondary hover:border-[#9B59B6] hover:bg-[#F3EAF9] hover:text-[#4A1572] transition-colors"
-                  >
-                    {t.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
           {/* Content textarea */}
           <textarea
+            id="note-content"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="Start writing... Use **bold**, ## headings, - lists, and #tags"
-            className="w-full min-h-[400px] text-[14px] text-text-primary leading-relaxed placeholder:text-text-tertiary focus:outline-none resize-none font-mono"
-            style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+            placeholder="Start writing your thoughts here..."
+            className="w-full min-h-[400px] text-[14px] text-text-primary leading-relaxed placeholder:text-text-tertiary focus:outline-none resize-none"
           />
-
-          {/* Markdown hints */}
-          <div className="mt-4 pt-4 border-t border-black/[0.06]">
-            <p className="text-[10px] text-text-tertiary">
-              Formatting: **bold** · *italic* · ## heading · - list · &gt; quote · #tag · [[link to note]]
-            </p>
-          </div>
         </div>
       </div>
     </div>

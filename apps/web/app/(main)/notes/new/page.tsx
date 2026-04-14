@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, FolderOpen, Clock } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
+import { FormattingToolbar } from '@/components/notes/formatting-toolbar';
 
 export default function NewNotePage() {
   const [title, setTitle] = useState('');
@@ -12,11 +13,11 @@ export default function NewNotePage() {
   const today = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
 
   const templates = [
-    { name: 'Sermon notes', template: `## Sermon: \n## Speaker: \n## Date: ${today}\n\n## Key points\n\n1. \n2. \n3. \n\n## Scripture references\n\n- \n\n## Personal takeaway\n\n\n\n#sermon` },
-    { name: 'Prayer journal', template: `## Prayer — ${today}\n\n### Thanksgiving\n\n\n### Requests\n\n\n### Declarations\n\n\n#prayer` },
-    { name: 'Bible study', template: `## Passage: \n\n### Context\n\n\n### Key verses\n\n> \n\n### Observations\n\n\n### Application\n\n\n#bible-study` },
-    { name: 'Daily note', template: `## ${today}\n\n### Morning thoughts\n\n\n### Today I'm grateful for\n\n1. \n2. \n3. \n\n### Reflections\n\n\n#daily` },
-    { name: 'Blank', template: '' },
+    { name: 'Sermon notes', folder: 'sermon', template: `Sermon: \nSpeaker: \nDate: ${today}\n\nKey points\n\n1. \n2. \n3. \n\nScripture references\n\n- \n\nPersonal takeaway\n\n` },
+    { name: 'Prayer journal', folder: 'prayer', template: `Prayer — ${today}\n\nThanksgiving\n\n\nRequests\n\n\nDeclarations\n\n` },
+    { name: 'Bible study', folder: 'bible-study', template: `Passage: \n\nContext\n\n\nKey verses\n\n\nObservations\n\n\nApplication\n\n` },
+    { name: 'Daily note', folder: 'personal', template: `${today}\n\nMorning thoughts\n\n\nToday I'm grateful for\n\n1. \n2. \n3. \n\nReflections\n\n` },
+    { name: 'Blank', folder: 'personal', template: '' },
   ];
 
   return (
@@ -43,6 +44,9 @@ export default function NewNotePage() {
         </button>
       </div>
 
+      {/* Formatting toolbar */}
+      <FormattingToolbar textareaId="note-content" content={content} onContentChange={setContent} />
+
       {/* Editor */}
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-2xl mx-auto px-4 py-4">
@@ -50,7 +54,7 @@ export default function NewNotePage() {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Note title..."
+            placeholder="Give your note a title..."
             className="w-full text-[20px] font-medium text-text-primary placeholder:text-text-tertiary focus:outline-none mb-4"
           />
 
@@ -62,7 +66,7 @@ export default function NewNotePage() {
                 {templates.map((t) => (
                   <button
                     key={t.name}
-                    onClick={() => { setContent(t.template); if (t.name !== 'Blank') setFolder(t.name === 'Sermon notes' ? 'sermon' : t.name === 'Prayer journal' ? 'prayer' : t.name === 'Bible study' ? 'bible-study' : 'personal'); }}
+                    onClick={() => { setContent(t.template); setFolder(t.folder); }}
                     className="px-3 py-1.5 rounded-lg text-[12px] border border-black/10 text-text-secondary hover:border-[#9B59B6] hover:bg-[#F3EAF9] hover:text-[#4A1572] transition-colors"
                   >
                     {t.name}
@@ -73,17 +77,12 @@ export default function NewNotePage() {
           )}
 
           <textarea
+            id="note-content"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="Start writing... Use **bold**, ## headings, - lists, and #tags"
+            placeholder="Start writing your thoughts here..."
             className="w-full min-h-[400px] text-[14px] text-text-primary leading-relaxed placeholder:text-text-tertiary focus:outline-none resize-none"
           />
-
-          <div className="mt-4 pt-4 border-t border-black/[0.06]">
-            <p className="text-[10px] text-text-tertiary">
-              Formatting: **bold** · *italic* · ## heading · - list · &gt; quote · #tag · [[link to note]]
-            </p>
-          </div>
         </div>
       </div>
     </div>
