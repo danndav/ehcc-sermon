@@ -172,7 +172,7 @@ export default function LoginPage() {
                   inputMode="numeric"
                   value={eaNumber}
                   onChange={(e) => setEaNumber(e.target.value.replace(/[^0-9/A-Za-z]/g, ''))}
-                  placeholder="0191"
+                  placeholder="0000"
                   autoFocus
                   className="flex-1 bg-surface border border-black/[0.15] rounded-lg px-3.5 py-2.5 text-[13px] text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-[#4A1572] focus:ring-[3px] focus:ring-[#4A1572]/15 transition-all"
                 />
