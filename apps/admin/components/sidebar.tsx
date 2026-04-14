@@ -18,6 +18,8 @@ import {
   Menu,
   X,
   DollarSign,
+  Smile,
+  HandCoins,
 } from 'lucide-react';
 
 const navItems = [
@@ -26,7 +28,9 @@ const navItems = [
   { name: 'Series', href: '/series', icon: Layers },
   { name: 'Pastors', href: '/pastors', icon: Mic },
   { name: 'Classes', href: '/classes', icon: GraduationCap },
+  { name: 'Kids', href: '/kids', icon: Smile },
   { name: 'Prayer', href: '/prayer/requests', icon: Heart },
+  { name: 'Giving', href: '/giving', icon: HandCoins },
   { name: 'Users', href: '/users', icon: Users },
   { name: 'Subscriptions', href: '/subscriptions/plans', icon: CreditCard },
   { name: 'Payments', href: '/payments', icon: DollarSign },

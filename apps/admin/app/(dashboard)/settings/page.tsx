@@ -2,6 +2,18 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { Video } from 'lucide-react';
+
+const MOCK_SERMONS = [
+  { id: '1', title: 'The Power of Faith', pastor: 'Rev Deji Olabode' },
+  { id: '2', title: 'Walking in Purpose', pastor: 'Dr Seun Olabode' },
+  { id: '3', title: 'Grace Unlimited', pastor: 'Rev Deji Olabode' },
+  { id: '4', title: 'The Heart of Worship', pastor: 'Min Joseph Sanni' },
+  { id: '5', title: 'Kingdom Mindset', pastor: 'Dr Seun Olabode' },
+  { id: '6', title: 'Overcoming Fear', pastor: 'Rev Deji Olabode' },
+  { id: '7', title: 'Divine Connections', pastor: 'Min Joseph Sanni' },
+  { id: '8', title: 'Seasons of Change', pastor: 'Dr Seun Olabode' },
+];
 
 export default function AppSettingsPage() {
   const [featuredSermonId, setFeaturedSermonId] = useState('1');
@@ -17,8 +29,21 @@ export default function AppSettingsPage() {
           <h2 className="text-[14px] font-medium text-text-primary mb-3">General</h2>
           <div className="space-y-3">
             <div>
-              <label className="block text-[12px] text-text-secondary mb-1">Featured sermon ID</label>
-              <input type="text" value={featuredSermonId} onChange={(e) => setFeaturedSermonId(e.target.value)} className="w-full bg-surface border border-black/[0.15] rounded-lg px-3.5 py-2.5 text-[13px] focus:outline-none focus:border-[#4A1572]" />
+              <label className="block text-[12px] text-text-secondary mb-1">Featured sermon</label>
+              <div className="relative">
+                <Video size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary pointer-events-none" />
+                <select value={featuredSermonId} onChange={(e) => setFeaturedSermonId(e.target.value)} className="w-full bg-surface border border-black/[0.15] rounded-lg pl-8 pr-3.5 py-2.5 text-[13px] focus:outline-none focus:border-[#4A1572] appearance-none">
+                  <option value="">Select a sermon</option>
+                  {MOCK_SERMONS.map((s) => (
+                    <option key={s.id} value={s.id}>{s.title} — {s.pastor}</option>
+                  ))}
+                </select>
+              </div>
+              {featuredSermonId && (
+                <p className="text-[10px] text-text-tertiary mt-1">
+                  Currently featuring: {MOCK_SERMONS.find((s) => s.id === featuredSermonId)?.title ?? 'Unknown sermon'}
+                </p>
+              )}
             </div>
             <div>
               <label className="block text-[12px] text-text-secondary mb-1">Default trial period (days)</label>
