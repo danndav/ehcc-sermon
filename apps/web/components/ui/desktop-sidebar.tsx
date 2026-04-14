@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Home, Play, Heart, Layers, Mic, GraduationCap, Bookmark, Clock, FileText } from 'lucide-react';
+import { Home, Play, Heart, Layers, Mic, GraduationCap, Smile, Bookmark, Clock, FileText, TrendingUp } from 'lucide-react';
 
 const mainNav = [
   { name: 'Home', href: '/home', icon: Home },
@@ -11,12 +11,14 @@ const mainNav = [
   { name: 'Series', href: '/series', icon: Layers },
   { name: 'Speakers', href: '/speakers', icon: Mic },
   { name: 'Classes', href: '/classes', icon: GraduationCap },
+  { name: 'Kids', href: '/kids', icon: Smile },
 ];
 
 const libraryNav = [
   { name: 'Bookmarks', href: '/bookmarks', icon: Bookmark },
   { name: 'Watch history', href: '/history', icon: Clock },
   { name: 'My notes', href: '/notes', icon: FileText },
+  { name: 'Growth', href: '/growth', icon: TrendingUp },
 ];
 
 export function DesktopSidebar() {

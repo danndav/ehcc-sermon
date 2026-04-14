@@ -15,7 +15,9 @@ import {
   Bookmark,
   Clock,
   FileText,
+  TrendingUp,
   PlusCircle,
+  Smile,
   User,
   Settings,
   CreditCard,
@@ -30,12 +32,14 @@ const mainNav = [
   { name: 'Speakers', href: '/speakers', icon: Mic },
   { name: 'Classes', href: '/classes', icon: GraduationCap },
   { name: 'Give', href: '/give', icon: PlusCircle },
+  { name: 'Kids', href: '/kids', icon: Smile },
 ];
 
 const libraryNav = [
   { name: 'Bookmarks', href: '/bookmarks', icon: Bookmark },
   { name: 'Watch history', href: '/history', icon: Clock },
   { name: 'My notes', href: '/notes', icon: FileText },
+  { name: 'Growth', href: '/growth', icon: TrendingUp },
 ];
 
 const accountNav = [

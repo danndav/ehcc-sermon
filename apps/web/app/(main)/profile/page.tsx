@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Settings, ChevronRight } from 'lucide-react';
+import { Settings, ChevronRight, TrendingUp } from 'lucide-react';
 import { SermonCard } from '@/components/sermon/sermon-card';
 import { MOCK_SERMONS, MOCK_CONTINUE_WATCHING } from '@/lib/mock-data';
 
@@ -40,6 +40,15 @@ export default function ProfilePage() {
           </div>
         ))}
       </div>
+
+      {/* Growth link */}
+      <Link href="/growth" className="flex items-center justify-between bg-white border border-black/10 rounded-xl p-3 hover:border-black/20 transition-colors">
+        <div className="flex items-center gap-2">
+          <TrendingUp size={16} className="text-[#4A1572]" />
+          <span className="text-[13px] font-medium text-text-primary">View spiritual growth</span>
+        </div>
+        <ChevronRight size={16} className="text-text-tertiary" />
+      </Link>
 
       {/* Continue Watching */}
       {MOCK_CONTINUE_WATCHING.length > 0 && (
