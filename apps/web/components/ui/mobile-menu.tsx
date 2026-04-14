@@ -197,7 +197,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               <p className="text-[13px] font-medium text-text-primary truncate">David Daniel</p>
               <p className="text-[10px] text-text-tertiary">Subscriber</p>
             </div>
-            <button className="text-text-tertiary hover:text-text-primary">
+            <button onClick={() => { const { logout } = require('@/lib/auth'); logout(); }} className="text-text-tertiary hover:text-text-primary">
               <LogOut size={18} />
             </button>
           </div>
