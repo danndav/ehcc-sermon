@@ -5,7 +5,25 @@ export const MOCK_STATS = {
   activePrayerRequests: 23,
   newSignupsThisMonth: 67,
   churnRate: '4.2%',
+  watchTimeHours: 1842,
+  newSignupsThisWeek: 23,
+  prayerRequestsThisWeek: 15,
+  prayerAgreementsThisWeek: 89,
+  activePrayerMembers: 45,
 };
+
+export const MOCK_SIGNUPS_30_DAYS = [
+  { date: '15 Mar', count: 3 }, { date: '16 Mar', count: 1 }, { date: '17 Mar', count: 4 },
+  { date: '18 Mar', count: 2 }, { date: '19 Mar', count: 0 }, { date: '20 Mar', count: 5 },
+  { date: '21 Mar', count: 3 }, { date: '22 Mar', count: 2 }, { date: '23 Mar', count: 1 },
+  { date: '24 Mar', count: 6 }, { date: '25 Mar', count: 4 }, { date: '26 Mar', count: 2 },
+  { date: '27 Mar', count: 3 }, { date: '28 Mar', count: 1 }, { date: '29 Mar', count: 7 },
+  { date: '30 Mar', count: 2 }, { date: '31 Mar', count: 4 }, { date: '1 Apr', count: 3 },
+  { date: '2 Apr', count: 5 }, { date: '3 Apr', count: 1 }, { date: '4 Apr', count: 2 },
+  { date: '5 Apr', count: 8 }, { date: '6 Apr', count: 6 }, { date: '7 Apr', count: 3 },
+  { date: '8 Apr', count: 4 }, { date: '9 Apr', count: 2 }, { date: '10 Apr', count: 5 },
+  { date: '11 Apr', count: 3 }, { date: '12 Apr', count: 1 }, { date: '13 Apr', count: 4 },
+];
 
 export const MOCK_RECENT_ACTIVITY = [
   { id: '1', type: 'sermon', message: 'New sermon uploaded: "Open Heavens — Day 3 Evening"', time: '2 hours ago' },
