@@ -15,6 +15,15 @@ export default function LoginPage() {
   const [loginMethod, setLoginMethod] = useState<LoginMethod>('ea');
   const [eaPrefix, setEaPrefix] = useState('EA');
   const [eaNumber, setEaNumber] = useState('0000');
+
+  const handleEaNumberChange = (value: string) => {
+    // Only allow digits
+    const digits = value.replace(/\D/g, '');
+    // Take last 4 digits and pad with leading zeros
+    const trimmed = digits.slice(-4);
+    const padded = trimmed.padStart(4, '0');
+    setEaNumber(padded);
+  };
   const [emailInput, setEmailInput] = useState('');
   const [identifier, setIdentifier] = useState('');
   const [userName, setUserName] = useState('');
@@ -171,8 +180,8 @@ export default function LoginPage() {
                   type="text"
                   inputMode="numeric"
                   value={eaNumber}
-                  onChange={(e) => setEaNumber(e.target.value.replace(/[^0-9/A-Za-z]/g, ''))}
-                  placeholder="0000"
+                  onChange={(e) => handleEaNumberChange(e.target.value)}
+                  maxLength={4}
                   autoFocus
                   className="flex-1 bg-surface border border-black/[0.15] rounded-lg px-3.5 py-2.5 text-[13px] text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-[#4A1572] focus:ring-[3px] focus:ring-[#4A1572]/15 transition-all"
                 />
