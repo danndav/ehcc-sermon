@@ -92,6 +92,7 @@
   },
   "scripts": {
     "build": "tsc --watch false",
+    "dev": "npx ts-node -r tsconfig-paths/register src/local.ts",
     "db:docker": "echo 'Starting DB' && docker rm -fv ehcc-postgres && docker run --rm --name ehcc-postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=ehcc -e POSTGRES_USER=ehcc -p 5577:5432 -d postgres:16-alpine",
     "db:migrations-server": "TYPEORM_MIGRATIONS='src/aop/db/migrations/**/*.ts' TYPEORM_DRIVER_EXTRA='{ \"ssl\": false }' TYPEORM_URL=\"postgres://e2e:${CI_POSTGRES_PASSWORD:-3b628d538f8705}@${CI_POSTGRES_HOST:-localhost}:${CI_POSTGRES_PORT:-5555}/${CI_POSTGRES_DB:-e2e}\" yarn run typeorm migration:run",
     "db:migrations": "TYPEORM_MIGRATIONS='src/aop/db/migrations/**/*.ts' TYPEORM_DRIVER_EXTRA='{ \"ssl\": false }' TYPEORM_URL=\"postgres://ehcc:password@${CI_TRUVALA_POSTGRES_ALIAS:-localhost}:${CI_POSTGRES_DEFAULT_PORT:-5577}/ehcc\" yarn run typeorm-ts-node-commonjs migration:run -d ormconfig.ts",

@@ -16,13 +16,13 @@ export class ProcessCustomerRequestMiddleware implements NestMiddleware {
       return;
     }
 
-    const { email, role, phone } = decodedToken;
+    const { email, eaNumber, role } = decodedToken;
 
     let user = null;
-    if (email) {
+    if (eaNumber) {
+      user = await this.iamService.findUserByEaNumber(eaNumber);
+    } else if (email) {
       user = await this.iamService.findUserByEmail(email);
-    } else if (phone) {
-      user = await this.iamService.findUserByPhone(phone);
     }
 
     if (!user) {
@@ -35,5 +35,3 @@ export class ProcessCustomerRequestMiddleware implements NestMiddleware {
     next();
   }
 }
-
-

@@ -12,7 +12,7 @@ export class UserAdminService {
     return { users, total };
   }
 
-  async getUserById(id: string): Promise<User> {
+  async getUserById(id: number): Promise<User> {
     const user = await this.userRepository.findById(id);
     if (!user) {
       throw new NotFoundException(`User not found: ${id}`);
@@ -20,21 +20,21 @@ export class UserAdminService {
     return user;
   }
 
-  async updateRole(id: string, role: RoleEnum): Promise<User> {
+  async updateRole(id: number, role: RoleEnum): Promise<User> {
     const user = await this.getUserById(id);
     const updated = await this.userRepository.update(user.id, { role });
     if (!updated) throw new NotFoundException('User not found');
     return updated;
   }
 
-  async suspendUser(id: string): Promise<User> {
+  async suspendUser(id: number): Promise<User> {
     const user = await this.getUserById(id);
     const updated = await this.userRepository.update(user.id, { isSuspended: true });
     if (!updated) throw new NotFoundException('User not found');
     return updated;
   }
 
-  async unsuspendUser(id: string): Promise<User> {
+  async unsuspendUser(id: number): Promise<User> {
     const user = await this.getUserById(id);
     const updated = await this.userRepository.update(user.id, { isSuspended: false });
     if (!updated) throw new NotFoundException('User not found');

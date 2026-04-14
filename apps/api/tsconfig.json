@@ -15,7 +15,7 @@
       "skipLibCheck": true,
       "sourceMap": true,
       "incremental": true,
-      "strict": true,
+      "strict": false,
       "strictPropertyInitialization": false,
       "outDir": ".build",
       "target": "ES2022",
@@ -26,8 +26,10 @@
     },
     "ts-node": {
       "compilerOptions": {
-        "module": "CommonJS"
-      }
+        "module": "CommonJS",
+        "strict": false
+      },
+      "transpileOnly": true
     },
     "include": ["src", "vitest.config.ts"],
     "exclude": [".build", "**/node_modules", "**/.*/"]

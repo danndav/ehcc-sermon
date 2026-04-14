@@ -1,5 +1,3 @@
-org: ehcc
-app: ehcc-plus
 service: ehcc-plus-api
 
 package:
