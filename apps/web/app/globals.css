@@ -6,13 +6,6 @@
   body {
     @apply bg-white text-text-primary antialiased;
   }
-
-  /* Prevent iOS Safari zoom on input focus — inputs must be >= 16px on mobile */
-  @media (max-width: 767px) {
-    input, textarea, select {
-      font-size: 16px !important;
-    }
-  }
 }
 
 @layer utilities {
@@ -25,3 +18,22 @@
   }
 }
 
+/*
+  Prevent iOS Safari auto-zoom on input focus.
+  Must be OUTSIDE @layer to override Tailwind utility classes.
+  iOS zooms when input font-size < 16px.
+*/
+@media (max-width: 767px) {
+  input,
+  textarea,
+  select,
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="url"] {
+    font-size: 16px !important;
+  }
+}
