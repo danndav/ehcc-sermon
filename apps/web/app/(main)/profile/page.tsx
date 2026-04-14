@@ -1,13 +1,17 @@
+'use client';
+
 import Link from 'next/link';
-import { Settings, ChevronRight, TrendingUp } from 'lucide-react';
+import { Settings, ChevronRight, TrendingUp, LogOut } from 'lucide-react';
 import { SermonCard } from '@/components/sermon/sermon-card';
 import { MOCK_SERMONS, MOCK_CONTINUE_WATCHING } from '@/lib/mock-data';
+import { useAuth } from '@/lib/use-auth';
 
 export default function ProfilePage() {
+  const { initials, displayName, email, eaNumber, role, logout } = useAuth();
   const bookmarked = MOCK_SERMONS.slice(2, 5);
 
   return (
-    <div className="px-4 py-4 space-y-5">
+    <div className="px-4 lg:px-6 py-4 lg:py-6 space-y-5">
       <div className="flex items-center justify-between">
         <h1 className="text-page-title text-text-primary">My Profile</h1>
         <Link href="/profile/settings" className="text-text-tertiary"><Settings size={20} /></Link>
@@ -16,13 +20,14 @@ export default function ProfilePage() {
       {/* User Info */}
       <div className="flex items-center gap-3">
         <div className="w-[44px] h-[44px] rounded-full bg-[#F3EAF9] text-[#4A1572] flex items-center justify-center text-[14px] font-medium">
-          AO
+          {initials}
         </div>
         <div>
-          <h2 className="text-[15px] font-medium text-text-primary">David Daniel</h2>
-          <p className="text-[11px] text-text-tertiary">david@email.com</p>
-          <span className="inline-block mt-0.5 bg-[#F3EAF9] text-[#4A1572] text-[10px] font-medium rounded-full px-2 py-0.5">
-            EHCC Plus Subscriber
+          <h2 className="text-[15px] font-medium text-text-primary">{displayName}</h2>
+          {email && <p className="text-[11px] text-text-tertiary">{email}</p>}
+          {eaNumber && <p className="text-[11px] text-text-tertiary">{eaNumber}</p>}
+          <span className="inline-block mt-0.5 bg-[#F3EAF9] text-[#4A1572] text-[10px] font-medium rounded-full px-2 py-0.5 capitalize">
+            {role}
           </span>
         </div>
       </div>
@@ -109,6 +114,15 @@ export default function ProfilePage() {
           </div>
         </div>
       </section>
+
+      {/* Logout */}
+      <button
+        onClick={logout}
+        className="w-full flex items-center justify-center gap-2 py-2.5 text-[13px] text-coral border border-coral/20 rounded-xl hover:bg-coral-light transition-colors"
+      >
+        <LogOut size={16} />
+        Log out
+      </button>
     </div>
   );
 }

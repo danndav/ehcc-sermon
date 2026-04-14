@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Home, Play, Heart, Layers, Mic, GraduationCap, Smile, Bookmark, Clock, FileText, TrendingUp } from 'lucide-react';
+import { useAuth } from '@/lib/use-auth';
 
 const mainNav = [
   { name: 'Home', href: '/home', icon: Home },
@@ -23,6 +24,7 @@ const libraryNav = [
 
 export function DesktopSidebar() {
   const pathname = usePathname();
+  const { initials, displayName, role } = useAuth();
 
   const isActive = (href: string) => {
     if (href === '/home') return pathname === '/home';
@@ -79,12 +81,11 @@ export function DesktopSidebar() {
         <div className="mt-auto pt-4 border-t border-white/10">
           <div className="flex items-center gap-2.5 px-3">
             <div className="w-8 h-8 rounded-full bg-[#F3EAF9] text-[#4A1572] flex items-center justify-center text-[10px] font-medium shrink-0">
-              DD
+              {initials}
             </div>
             <div className="min-w-0">
-              <p className="text-white text-[12px] font-medium truncate">EHCC Plus</p>
-              <p className="text-[#C4B5D9] text-[10px]">Active subscriber</p>
-              <p className="text-[#C4B5D9] text-[10px]">Renews 13 May</p>
+              <p className="text-white text-[12px] font-medium truncate">{displayName}</p>
+              <p className="text-[#C4B5D9] text-[10px] capitalize">{role}</p>
             </div>
           </div>
         </div>

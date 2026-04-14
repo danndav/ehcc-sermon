@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { img } from '@/lib/utils';
+import { useAuth } from '@/lib/use-auth';
 import {
   X,
   Home,
@@ -55,6 +56,7 @@ interface MobileMenuProps {
 
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const pathname = usePathname();
+  const { initials, displayName, role, logout } = useAuth();
 
   // Close on route change
   useEffect(() => {
@@ -191,13 +193,13 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         <div className="px-4 py-3 border-t border-black/[0.06]">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-full bg-[#F3EAF9] text-[#4A1572] flex items-center justify-center text-[11px] font-medium shrink-0">
-              DD
+              {initials}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[13px] font-medium text-text-primary truncate">David Daniel</p>
-              <p className="text-[10px] text-text-tertiary">Subscriber</p>
+              <p className="text-[13px] font-medium text-text-primary truncate">{displayName}</p>
+              <p className="text-[10px] text-text-tertiary capitalize">{role}</p>
             </div>
-            <button onClick={() => { const { logout } = require('@/lib/auth'); logout(); }} className="text-text-tertiary hover:text-text-primary">
+            <button onClick={logout} className="text-text-tertiary hover:text-text-primary">
               <LogOut size={18} />
             </button>
           </div>
