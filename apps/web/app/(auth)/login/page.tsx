@@ -14,7 +14,7 @@ export default function LoginPage() {
   const [step, setStep] = useState<Step>('identifier');
   const [loginMethod, setLoginMethod] = useState<LoginMethod>('ea');
   const [eaPrefix, setEaPrefix] = useState('EA');
-  const [eaNumber, setEaNumber] = useState('');
+  const [eaNumber, setEaNumber] = useState('0000');
   const [emailInput, setEmailInput] = useState('');
   const [identifier, setIdentifier] = useState('');
   const [userName, setUserName] = useState('');
