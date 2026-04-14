@@ -16,13 +16,33 @@ export default function LoginPage() {
   const [eaPrefix, setEaPrefix] = useState('EA');
   const [eaNumber, setEaNumber] = useState('0000');
 
-  const handleEaNumberChange = (value: string) => {
-    // Only allow digits
-    const digits = value.replace(/\D/g, '');
-    // Take last 4 digits and pad with leading zeros
-    const trimmed = digits.slice(-4);
-    const padded = trimmed.padStart(4, '0');
-    setEaNumber(padded);
+  const handleEaKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const input = e.currentTarget;
+    const key = e.key;
+
+    if (key === 'Backspace') {
+      e.preventDefault();
+      // Shift digits right (remove last digit, add 0 at front)
+      const current = eaNumber;
+      const shifted = '0' + current.slice(0, 3);
+      setEaNumber(shifted);
+      setTimeout(() => input.setSelectionRange(4, 4), 0);
+      return;
+    }
+
+    if (/^\d$/.test(key)) {
+      e.preventDefault();
+      // Shift digits left and add new digit at end
+      const shifted = eaNumber.slice(1) + key;
+      setEaNumber(shifted);
+      setTimeout(() => input.setSelectionRange(4, 4), 0);
+      return;
+    }
+
+    // Allow Tab, Enter, Arrow keys
+    if (!['Tab', 'Enter', 'ArrowLeft', 'ArrowRight'].includes(key)) {
+      e.preventDefault();
+    }
   };
   const [emailInput, setEmailInput] = useState('');
   const [identifier, setIdentifier] = useState('');
@@ -180,8 +200,8 @@ export default function LoginPage() {
                   type="text"
                   inputMode="numeric"
                   value={eaNumber}
-                  onChange={(e) => handleEaNumberChange(e.target.value)}
-                  maxLength={4}
+                  onChange={() => {}}
+                  onKeyDown={handleEaKeyDown}
                   autoFocus
                   className="flex-1 bg-surface border border-black/[0.15] rounded-lg px-3.5 py-2.5 text-[13px] text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-[#4A1572] focus:ring-[3px] focus:ring-[#4A1572]/15 transition-all"
                 />
