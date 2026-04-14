@@ -79,7 +79,7 @@ export function DesktopSidebar() {
         <div className="mt-auto pt-4 border-t border-white/10">
           <div className="flex items-center gap-2.5 px-3">
             <div className="w-8 h-8 rounded-full bg-[#F3EAF9] text-[#4A1572] flex items-center justify-center text-[10px] font-medium shrink-0">
-              AO
+              DD
             </div>
             <div className="min-w-0">
               <p className="text-white text-[12px] font-medium truncate">EHCC Plus</p>

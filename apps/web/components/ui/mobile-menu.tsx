@@ -191,10 +191,10 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         <div className="px-4 py-3 border-t border-black/[0.06]">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-full bg-[#F3EAF9] text-[#4A1572] flex items-center justify-center text-[11px] font-medium shrink-0">
-              AO
+              DD
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[13px] font-medium text-text-primary truncate">Adaeze Okonkwo</p>
+              <p className="text-[13px] font-medium text-text-primary truncate">David Daniel</p>
               <p className="text-[10px] text-text-tertiary">Subscriber</p>
             </div>
             <button className="text-text-tertiary hover:text-text-primary">

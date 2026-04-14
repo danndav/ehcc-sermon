@@ -50,7 +50,7 @@ export function Header() {
               Upgrade to Plus
             </button>
             <Link href="/profile" className="w-8 h-8 rounded-full bg-[#F3EAF9] text-[#4A1572] flex items-center justify-center text-[11px] font-medium">
-              AO
+              DD
             </Link>
           </div>
         </div>

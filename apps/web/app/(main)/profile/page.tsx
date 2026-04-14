@@ -19,8 +19,8 @@ export default function ProfilePage() {
           AO
         </div>
         <div>
-          <h2 className="text-[15px] font-medium text-text-primary">Adaeze Okonkwo</h2>
-          <p className="text-[11px] text-text-tertiary">adaeze@email.com</p>
+          <h2 className="text-[15px] font-medium text-text-primary">David Daniel</h2>
+          <p className="text-[11px] text-text-tertiary">david@email.com</p>
           <span className="inline-block mt-0.5 bg-[#F3EAF9] text-[#4A1572] text-[10px] font-medium rounded-full px-2 py-0.5">
             EHCC Plus Subscriber
           </span>
