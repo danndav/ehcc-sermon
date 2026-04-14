@@ -1,15 +1,28 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { img } from '@/lib/utils';
 import { useAuth } from '@/lib/use-auth';
-import { Search, Menu } from 'lucide-react';
+import { Search, Menu, User, LogOut, Settings } from 'lucide-react';
 import { MobileMenu } from './mobile-menu';
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { initials } = useAuth();
+  const [profileDropdown, setProfileDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const { initials, displayName, eaNumber, email, logout } = useAuth();
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setProfileDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
 
   return (
     <>
@@ -45,9 +58,50 @@ export function Header() {
             <Link href="/sermons" className="text-text-tertiary hover:text-text-primary md:hidden">
               <Search size={20} />
             </Link>
-            <Link href="/profile" className="w-8 h-8 rounded-full bg-[#F3EAF9] text-[#4A1572] flex items-center justify-center text-[11px] font-medium">
-              {initials}
-            </Link>
+
+            {/* Profile avatar + dropdown */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setProfileDropdown(!profileDropdown)}
+                className="w-8 h-8 rounded-full bg-[#F3EAF9] text-[#4A1572] flex items-center justify-center text-[11px] font-medium"
+              >
+                {initials}
+              </button>
+
+              {profileDropdown && (
+                <div className="absolute right-0 top-10 w-56 bg-white border border-black/10 rounded-xl overflow-hidden z-50">
+                  <div className="px-4 py-3 border-b border-black/[0.06]">
+                    <p className="text-[13px] font-medium text-text-primary">{displayName}</p>
+                    <p className="text-[11px] text-text-tertiary">{eaNumber || email || ''}</p>
+                  </div>
+                  <div className="py-1">
+                    <Link
+                      href="/profile"
+                      onClick={() => setProfileDropdown(false)}
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-[13px] text-text-primary hover:bg-surface transition-colors"
+                    >
+                      <User size={16} className="text-text-tertiary" />
+                      My profile
+                    </Link>
+                    <Link
+                      href="/profile/settings"
+                      onClick={() => setProfileDropdown(false)}
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-[13px] text-text-primary hover:bg-surface transition-colors"
+                    >
+                      <Settings size={16} className="text-text-tertiary" />
+                      Settings
+                    </Link>
+                    <button
+                      onClick={logout}
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-[13px] text-coral hover:bg-coral-light transition-colors w-full"
+                    >
+                      <LogOut size={16} />
+                      Log out
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </header>
