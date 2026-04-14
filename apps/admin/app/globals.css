@@ -4,6 +4,16 @@
 
 @layer base {
   body {
-    @apply bg-surface text-text-primary;
+    @apply bg-surface text-text-primary antialiased;
+  }
+}
+
+@layer utilities {
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
   }
 }
