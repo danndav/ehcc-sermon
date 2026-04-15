@@ -1,5 +1,6 @@
 import { Header } from '@/components/ui/header';
 import { DesktopSidebar } from '@/components/ui/desktop-sidebar';
+import { BranchProvider } from '@/lib/branch-context';
 
 export default function MainLayout({
   children,
@@ -7,14 +8,16 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      <div className="flex">
-        <DesktopSidebar />
-        <main className="flex-1 min-w-0">
-          {children}
-        </main>
+    <BranchProvider>
+      <div className="min-h-screen bg-white">
+        <Header />
+        <div className="flex">
+          <DesktopSidebar />
+          <main className="flex-1 min-w-0">
+            {children}
+          </main>
+        </div>
       </div>
-    </div>
+    </BranchProvider>
   );
 }

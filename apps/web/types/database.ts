@@ -2,6 +2,30 @@ export type ProgrammeType = 'sunday_service' | 'midweek_service' | '3dg' | 'morn
 export type ProgrammeSession = 'morning' | 'evening';
 export type MediaType = 'video' | 'audio';
 
+export interface Verse {
+  id: string;
+  type: 'week' | 'year';
+  scripture: string;
+  reference: string;
+  translation: string | null;
+  branchId: number | null;
+  startDate: string;
+  endDate: string | null;
+  isActive: boolean;
+  setBy: string | null;
+}
+
+export interface Branch {
+  id: number;
+  code: string | null;
+  name: string | null;
+  location: string | null;
+  country: string | null;
+  state: string | null;
+  city: string | null;
+  isActive: boolean;
+}
+
 export interface Sermon {
   id: string;
   title: string;
@@ -20,6 +44,7 @@ export interface Sermon {
   specialProgrammeName: string | null;
   threeDgDay: 1 | 2 | 3 | null;
   programmeSession: ProgrammeSession | null;
+  branchId: number | null;
   publishedAt: string | null;
   createdAt: string;
 }
@@ -38,6 +63,7 @@ export interface Series {
   description: string | null;
   thumbnailUrl: string | null;
   isActive: boolean;
+  branchId: number | null;
   createdAt: string;
 }
 
@@ -47,6 +73,7 @@ export interface Pastor {
   bio: string | null;
   photoUrl: string | null;
   churchRole: string | null;
+  branchId: number | null;
 }
 
 export interface User {

@@ -9,4 +9,12 @@ export class PrayerSettingsRepository {
     @InjectRepository(PrayerSettings)
     private readonly repo: Repository<PrayerSettings>,
   ) {}
+
+  async getSettings(): Promise<PrayerSettings | null> {
+    return this.repo.findOne({ where: {}, order: { createdAt: 'ASC' } });
+  }
+
+  async save(data: Partial<PrayerSettings>): Promise<PrayerSettings> {
+    return this.repo.save(data);
+  }
 }

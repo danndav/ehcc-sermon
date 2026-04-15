@@ -35,6 +35,9 @@ export class RolesGuard implements CanActivate {
       return false;
     }
 
+    // Super admin can access everything
+    if (user.role === RoleEnum.SUPER_ADMIN) return true;
+
     return requiredRoles.some((role) => user.role === role);
   }
 } 

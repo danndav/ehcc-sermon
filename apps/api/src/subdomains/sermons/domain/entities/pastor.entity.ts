@@ -14,4 +14,7 @@ export class Pastor extends IEntity {
 
   @Column({ type: 'varchar', nullable: true, name: 'church_role' })
   churchRole: string | null;
+
+  @Column({ type: 'int', nullable: true, name: 'branch_id' })
+  branchId: number | null;
 }

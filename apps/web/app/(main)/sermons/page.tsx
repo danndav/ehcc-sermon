@@ -1,12 +1,14 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Search, SlidersHorizontal, ChevronDown } from 'lucide-react';
+import { Search, SlidersHorizontal } from 'lucide-react';
 import { SermonCard } from '@/components/sermon/sermon-card';
 import { TOPIC_TAGS, PROGRAMME_TYPES } from '@/lib/constants';
-import { MOCK_SERMONS, AVAILABLE_YEARS } from '@/lib/mock-data';
+import { useSermons } from '@/lib/use-sermons';
+import { SermonGridSkeleton } from '@/components/ui/skeleton';
 
 export default function SermonsPage() {
+  const { sermons, loading } = useSermons();
   const [search, setSearch] = useState('');
   const [activeTopic, setActiveTopic] = useState('All');
   const [activeProgramme, setActiveProgramme] = useState('all');
@@ -16,32 +18,30 @@ export default function SermonsPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [guidancePrompt, setGuidancePrompt] = useState('');
 
+  const availableYears = useMemo(() => {
+    return Array.from(new Set(sermons.map(s => s.year))).sort((a, b) => b - a);
+  }, [sermons]);
+
   const filtered = useMemo(() => {
-    return MOCK_SERMONS.filter((s) => {
-      // Year filter
+    return sermons.filter((s) => {
       if (activeYear !== 'all' && s.year !== activeYear) return false;
-      // Programme filter
       if (activeProgramme !== 'all' && s.programmeType !== activeProgramme) return false;
-      // Access filter
       if (accessFilter === 'free' && !s.isFree) return false;
       if (accessFilter === 'premium' && s.isFree) return false;
-      // Media type filter
       if (mediaFilter !== 'all' && s.mediaType !== mediaFilter) return false;
-      // Topic filter
-      if (activeTopic !== 'All' && !s.tags?.some((t) => t.toLowerCase() === activeTopic.toLowerCase())) return false;
-      // Search
+      if (activeTopic !== 'All' && !s.tags?.some((t: string) => t.toLowerCase() === activeTopic.toLowerCase())) return false;
       if (search) {
         const q = search.toLowerCase();
         return (
           s.title.toLowerCase().includes(q) ||
           s.pastor.toLowerCase().includes(q) ||
-          s.tags?.some((t) => t.toLowerCase().includes(q)) ||
+          s.tags?.some((t: string) => t.toLowerCase().includes(q)) ||
           (s.specialProgrammeName && s.specialProgrammeName.toLowerCase().includes(q))
         );
       }
       return true;
     });
-  }, [search, activeTopic, activeProgramme, activeYear, accessFilter, mediaFilter]);
+  }, [sermons, search, activeTopic, activeProgramme, activeYear, accessFilter, mediaFilter]);
 
   // Group by year for display
   const groupedByYear = useMemo(() => {
@@ -95,7 +95,7 @@ export default function SermonsPage() {
         >
           All years
         </button>
-        {AVAILABLE_YEARS.map((year) => (
+        {availableYears.map((year) => (
           <button
             key={year}
             onClick={() => setActiveYear(activeYear === year ? 'all' : year)}
@@ -206,7 +206,9 @@ export default function SermonsPage() {
       </div>
 
       {/* Results count */}
-      <p className="text-[11px] text-text-tertiary">{filtered.length} sermons</p>
+      <p className="text-[11px] text-text-tertiary">{loading ? '' : `${filtered.length} sermons`}</p>
+
+      {loading && <SermonGridSkeleton count={8} />}
 
       {/* Results — grouped by year or flat */}
       {groupedByYear ? (

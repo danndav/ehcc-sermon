@@ -15,7 +15,7 @@ export class ApiModule implements NestModule {
       .apply(checkAuthenticationToken, createAdminContext)
       .forRoutes(SermonAdminController);
     consumer
-      .apply(checkAuthenticationToken, createUserContext)
+      .apply(createPublicContext)
       .forRoutes(SermonController);
   }
 }

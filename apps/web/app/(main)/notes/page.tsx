@@ -1,145 +1,120 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FileText, Clock, Tag } from 'lucide-react';
+import { FileText } from 'lucide-react';
+import { API_BASE_URL } from '@/lib/constants';
+import { getToken } from '@/lib/auth';
+import { Skeleton } from '@/components/ui/skeleton';
 
-const MOCK_NOTES = [
-  {
-    id: '1',
-    title: 'Peace in the storm — sermon takeaways',
-    folder: 'sermon',
-    content: 'Peace is not the absence of the storm — it is the presence of God in the storm. The disciples panicked, but Jesus slept. His peace was not dependent on circumstances...',
-    tags: ['peace', 'faith', 'sermon'],
-    linkedSermon: { id: '1', title: 'Finding Peace in the Storm' },
-    updatedAt: '14 Apr 2025, 10:30 AM',
-  },
-  {
-    id: '2',
-    title: 'Morning prayer — April 14',
-    folder: 'prayer',
-    content: 'Lord, I come before you this morning with a grateful heart. Thank you for a new day, for breath, for life. I surrender my plans to you today...',
-    tags: ['prayer', 'personal'],
-    linkedSermon: null,
-    updatedAt: '14 Apr 2025, 6:15 AM',
-  },
-  {
-    id: '3',
-    title: 'Power of prayer — study notes',
-    folder: 'sermon',
-    content: 'Prayer is not about changing God\'s mind. It\'s about aligning your heart with His will. Key scripture: Philippians 4:6-7. Three types of prayer discussed...',
-    tags: ['prayer', 'sermon'],
-    linkedSermon: { id: '2', title: 'Power of Prayer' },
-    updatedAt: '13 Apr 2025, 9:00 PM',
-  },
-  {
-    id: '4',
-    title: 'Genesis 1-3 — creation study',
-    folder: 'bible-study',
-    content: '## Day 1: Light\nGod spoke light into existence before the sun. Light represents truth, clarity, and God\'s presence...\n\n## Day 2: Firmament\nSeparation of waters...',
-    tags: ['faith', 'bible-study'],
-    linkedSermon: null,
-    updatedAt: '12 Apr 2025, 3:00 PM',
-  },
-  {
-    id: '5',
-    title: 'Overcoming fear — personal reflection',
-    folder: 'personal',
-    content: 'Fear is faith in reverse — it believes the worst will happen. I\'ve been carrying fear about the job situation. But God has not given me a spirit of fear...',
-    tags: ['faith', 'personal', 'healing'],
-    linkedSermon: { id: '5', title: 'Overcoming Fear Through Faith' },
-    updatedAt: '11 Apr 2025, 8:45 PM',
-  },
-  {
-    id: '6',
-    title: '3DG April — Day 1 evening notes',
-    folder: 'sermon',
-    content: 'The glory fell tonight. Pastor spoke about open heavens and what it means for a heaven to be open over your life. Key points:\n- Open heavens = unhindered access\n- Blocked heavens = sin, disobedience...',
-    tags: ['sermon', 'glory'],
-    linkedSermon: { id: '21', title: 'Open Heavens — Day 1 Evening' },
-    updatedAt: '1 Apr 2025, 11:00 PM',
-  },
-  {
-    id: '7',
-    title: 'Weekly reflection — March week 4',
-    folder: 'personal',
-    content: 'This week I watched 4 sermons and attended 3 prayer nights. I feel a shift in my spirit. The series on Walking in Purpose is really speaking to me...',
-    tags: ['personal', 'reflection'],
-    linkedSermon: null,
-    updatedAt: '30 Mar 2025, 7:00 PM',
-  },
-];
-
-const folderLabels: Record<string, string> = {
-  sermon: 'Sermon notes',
-  prayer: 'Prayer journal',
-  'bible-study': 'Bible study',
-  personal: 'Personal',
-};
-
-const folderColors: Record<string, string> = {
-  sermon: 'bg-[#F3EAF9] text-[#4A1572]',
-  prayer: 'bg-teal-light text-teal',
-  'bible-study': 'bg-amber-light text-amber',
-  personal: 'bg-coral-light text-coral',
-};
+interface Note {
+  id: string;
+  sermonId: string;
+  noteText: string;
+  highlightedText: string | null;
+  transcriptTimestamp: number | null;
+  createdAt: string;
+}
 
 export default function NotesListPage() {
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [sermonTitles, setSermonTitles] = useState<Map<string, string>>(new Map());
+  const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState<'recent' | 'title'>('recent');
 
-  const sorted = [...MOCK_NOTES].sort((a, b) => {
-    if (sortBy === 'title') return a.title.localeCompare(b.title);
-    return 0; // already sorted by recent
+  useEffect(() => {
+    const token = getToken();
+    if (!token) { setLoading(false); return; }
+    Promise.all([
+      fetch(`${API_BASE_URL}/sermons/user/notes`, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.ok ? r.json() : []),
+      fetch(`${API_BASE_URL}/sermons?limit=100`).then(r => r.json()).catch(() => ({ data: [] })),
+    ]).then(([notesData, sermonResult]) => {
+      setNotes(notesData || []);
+      const titleMap = new Map<string, string>();
+      (sermonResult.data || []).forEach((s: any) => titleMap.set(s.id, s.title));
+      setSermonTitles(titleMap);
+    }).finally(() => setLoading(false));
+  }, []);
+
+  const sorted = [...notes].sort((a, b) => {
+    if (sortBy === 'title') return a.noteText.localeCompare(b.noteText);
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
+
+  const formatTime = (ms: number | null) => {
+    if (!ms) return '';
+    const s = Math.floor(ms / 1000);
+    const m = Math.floor(s / 60);
+    return `${m}:${(s % 60).toString().padStart(2, '0')}`;
+  };
 
   return (
     <div className="p-4 lg:p-6">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-[18px] font-medium text-text-primary">All notes</h1>
         <div className="flex gap-1.5">
-          <button
-            onClick={() => setSortBy('recent')}
-            className={`px-2.5 py-1 rounded-lg text-[11px] border transition-colors ${sortBy === 'recent' ? 'bg-[#F3EAF9] border-[#9B59B6] text-[#4A1572]' : 'border-black/10 text-text-tertiary'}`}
-          >
+          <button onClick={() => setSortBy('recent')} className={`px-2.5 py-1 rounded-lg text-[11px] border transition-colors ${sortBy === 'recent' ? 'bg-[#F3EAF9] border-[#9B59B6] text-[#4A1572]' : 'border-black/10 text-text-tertiary'}`}>
             Recent
           </button>
-          <button
-            onClick={() => setSortBy('title')}
-            className={`px-2.5 py-1 rounded-lg text-[11px] border transition-colors ${sortBy === 'title' ? 'bg-[#F3EAF9] border-[#9B59B6] text-[#4A1572]' : 'border-black/10 text-text-tertiary'}`}
-          >
+          <button onClick={() => setSortBy('title')} className={`px-2.5 py-1 rounded-lg text-[11px] border transition-colors ${sortBy === 'title' ? 'bg-[#F3EAF9] border-[#9B59B6] text-[#4A1572]' : 'border-black/10 text-text-tertiary'}`}>
             A-Z
           </button>
         </div>
       </div>
 
-      <div className="space-y-2">
-        {sorted.map((note) => (
-          <Link key={note.id} href={`/notes/${note.id}`} className="block">
-            <div className="bg-white border border-black/10 rounded-xl p-3.5 hover:border-black/20 transition-colors">
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-[13px] font-medium text-text-primary">{note.title}</h3>
-                  <p className="text-[12px] text-text-secondary mt-1 line-clamp-2 leading-relaxed">{note.content}</p>
-                  <div className="flex items-center gap-2 mt-2 flex-wrap">
-                    <span className={`px-2 py-0.5 rounded text-[9px] font-medium ${folderColors[note.folder] || 'bg-surface text-text-tertiary'}`}>
-                      {folderLabels[note.folder] || note.folder}
-                    </span>
-                    {note.linkedSermon && (
-                      <span className="text-[10px] text-[#378ADD] bg-[#EBF4FF] px-1.5 py-0.5 rounded">
-                        {note.linkedSermon.title}
-                      </span>
-                    )}
-                    {note.tags.slice(0, 3).map((tag) => (
-                      <span key={tag} className="text-[10px] text-text-tertiary">#{tag}</span>
-                    ))}
-                  </div>
-                </div>
-                <span className="text-[10px] text-text-tertiary whitespace-nowrap shrink-0">{note.updatedAt.split(',')[0]}</span>
+      {loading ? (
+        <div className="space-y-2">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="bg-white border border-black/5 rounded-xl p-3.5 space-y-2">
+              <Skeleton className="h-3.5 w-full" />
+              <Skeleton className="h-3 w-2/3" />
+              <div className="flex items-center gap-2">
+                <Skeleton className="h-2.5 w-16" />
+                <Skeleton className="h-2.5 w-24" />
               </div>
             </div>
-          </Link>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : sorted.length > 0 ? (
+        <div className="space-y-2">
+          {sorted.map((note) => (
+            <Link key={note.id} href={`/watch/${note.sermonId}`} className="block">
+              <div className="bg-white border border-black/10 rounded-xl p-3.5 hover:border-black/20 transition-colors">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[13px] text-text-primary leading-relaxed">{note.noteText}</p>
+                    {note.highlightedText && (
+                      <p className="text-[11px] text-text-secondary italic mt-1.5 border-l-2 border-[#9B59B6]/30 pl-2 line-clamp-2">
+                        &ldquo;{note.highlightedText}&rdquo;
+                      </p>
+                    )}
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className="px-2 py-0.5 rounded text-[9px] font-medium bg-[#F3EAF9] text-[#4A1572]">Sermon note</span>
+                      {sermonTitles.get(note.sermonId) && (
+                        <span className="text-[10px] text-[#378ADD] bg-[#EBF4FF] px-1.5 py-0.5 rounded">
+                          {sermonTitles.get(note.sermonId)}
+                        </span>
+                      )}
+                      {note.transcriptTimestamp && (
+                        <span className="text-[10px] text-text-tertiary">at {formatTime(note.transcriptTimestamp)}</span>
+                      )}
+                    </div>
+                  </div>
+                  <span className="text-[10px] text-text-tertiary whitespace-nowrap shrink-0">
+                    {new Date(note.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+                  </span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-12">
+          <FileText size={32} className="mx-auto text-text-tertiary mb-2" />
+          <p className="text-[13px] text-text-tertiary">No notes yet</p>
+          <p className="text-[12px] text-text-tertiary mt-1">Take notes while watching sermons in study mode</p>
+        </div>
+      )}
     </div>
   );
 }

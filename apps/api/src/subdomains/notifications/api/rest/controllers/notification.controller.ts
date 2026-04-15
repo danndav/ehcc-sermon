@@ -31,7 +31,7 @@ export class NotificationController {
     @Query('page') page = 1,
     @Query('limit') limit = 20,
   ) {
-    const userId = (req.context as UserContext).currentUser.id;
+    const userId = String((req.context as UserContext).currentUser.id);
     return this.notificationService.getUserNotifications(userId, page, limit);
   }
 
@@ -40,7 +40,7 @@ export class NotificationController {
   @ApiResponse({ status: 200, description: 'Unread count retrieved successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized — missing or invalid token' })
   async getUnreadCount(@Req() req: Request) {
-    const userId = (req.context as UserContext).currentUser.id;
+    const userId = String((req.context as UserContext).currentUser.id);
     const count = await this.notificationService.getUnreadCount(userId);
     return { count };
   }
@@ -61,7 +61,7 @@ export class NotificationController {
   @ApiResponse({ status: 201, description: 'All notifications marked as read' })
   @ApiResponse({ status: 401, description: 'Unauthorized — missing or invalid token' })
   async markAllAsRead(@Req() req: Request) {
-    const userId = (req.context as UserContext).currentUser.id;
+    const userId = String((req.context as UserContext).currentUser.id);
     await this.notificationService.markAllAsRead(userId);
     return { success: true };
   }

@@ -55,6 +55,12 @@ export class Sermon extends IEntity {
   @Column({ type: 'enum', enum: ProgrammeSessionEnum, nullable: true, name: 'programme_session' })
   programmeSession: ProgrammeSessionEnum | null;
 
+  @Column({ type: 'int', nullable: true, name: 'branch_id' })
+  branchId: number | null;
+
+  @Column({ type: 'boolean', default: false, name: 'auto_publish' })
+  autoPublish: boolean;
+
   @Column({ type: 'timestamp', nullable: true, name: 'published_at' })
   publishedAt: Date | null;
 }

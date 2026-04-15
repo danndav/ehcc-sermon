@@ -9,7 +9,7 @@ async function bootstrap() {
   const app = await NestFactory.create(RootModule, { abortOnError: false });
 
   app.enableCors();
-  app.use(json({ limit: '10mb' }));
+  app.use(json({ limit: '50mb' }));
   app.setGlobalPrefix('api/v1');
 
   app.useGlobalPipes(

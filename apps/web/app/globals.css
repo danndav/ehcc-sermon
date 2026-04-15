@@ -18,6 +18,61 @@
   }
 }
 
+/* TipTap editor styles */
+.tiptap {
+  outline: none;
+}
+.tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #adb5bd;
+  pointer-events: none;
+  height: 0;
+}
+.tiptap h1 {
+  font-size: 1.4em;
+  font-weight: 700;
+  margin: 0.6em 0 0.3em;
+}
+.tiptap h2 {
+  font-size: 1.2em;
+  font-weight: 600;
+  margin: 0.5em 0 0.25em;
+}
+.tiptap p {
+  margin: 0.3em 0;
+}
+.tiptap ul,
+.tiptap ol {
+  padding-left: 1.5em;
+  margin: 0.3em 0;
+}
+.tiptap ul {
+  list-style: disc;
+}
+.tiptap ol {
+  list-style: decimal;
+}
+.tiptap li {
+  margin: 0.15em 0;
+}
+.tiptap blockquote {
+  border-left: 3px solid #4A1572;
+  padding-left: 0.8em;
+  margin: 0.4em 0;
+  color: #666;
+  font-style: italic;
+}
+.tiptap strong {
+  font-weight: 700;
+}
+.tiptap em {
+  font-style: italic;
+}
+.tiptap u {
+  text-decoration: underline;
+}
+
 /*
   Prevent iOS Safari auto-zoom on input focus.
   Must be OUTSIDE @layer to override Tailwind utility classes.

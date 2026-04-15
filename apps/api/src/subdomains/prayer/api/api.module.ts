@@ -3,7 +3,7 @@ import { ApplicationModule } from '../application/application.module';
 import { PrayerController } from './rest/controllers/prayer.controller';
 import { PrayerAdminController } from './rest/controllers/prayer-admin.controller';
 import { checkAuthenticationToken } from '../../../aop/authentication/middleware/check-authentication-token.middleware';
-import { createUserContext, createAdminContext } from '../../../aop/context/context.middleware';
+import { createUserContext, createAdminContext, createPublicContext } from '../../../aop/context/context.middleware';
 
 @Module({
   imports: [ApplicationModule],
@@ -15,7 +15,7 @@ export class ApiModule implements NestModule {
       .apply(checkAuthenticationToken, createAdminContext)
       .forRoutes(PrayerAdminController);
     consumer
-      .apply(checkAuthenticationToken, createUserContext)
+      .apply(createPublicContext)
       .forRoutes(PrayerController);
   }
 }

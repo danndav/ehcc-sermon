@@ -44,11 +44,12 @@ apps/api/src/subdomains/
 
 ### Current Subdomains
 - **auth** — Registration, login, JWT, role management
-- **sermons** — Sermon CRUD, series, pastors, watch history, bookmarks, notes
+- **branches** — Church branches (HQ, Lekki, Oshogbo, Ogbomosho, Abeokuta, UK, Canada, USA)
+- **sermons** — Sermon CRUD, series, pastors, watch history, bookmarks, notes, verses (week/year)
 - **prayer** — Prayer wall, prayer requests, prayer recordings, nightly prayer settings, prayer streaks
 - **subscriptions** — Paystack integration, subscription plans, sermon purchases, discount codes, webhooks
 - **ai** — Embedding generation, semantic search, spiritual guidance, auto-tagging, devotional generation
-- **media** — Bunny.net CDN upload, AssemblyAI transcription pipeline, signed URLs
+- **media** — Cloudflare R2 video storage, HLS transcoding pipeline, signed URLs, video cleanup
 - **notifications** — Push (Firebase), email (Resend), in-app notifications
 
 ### Cross-Cutting Concerns (AOP Layer)
@@ -234,7 +235,9 @@ apps/api/src/subdomains/{subdomain-name}/
 
 ## External Integrations
 - **Payments**: Paystack (Nigeria), Stripe (international — Phase 2)
-- **Video CDN**: Bunny.net — upload, signed URLs, DRM
+- **Video Storage**: Cloudflare R2 — self-hosted HLS pipeline, zero egress, signed URLs for paid content
+- **Video Transcoding**: FFmpeg on DigitalOcean VPS — HLS 4-quality (1080p/720p/480p/360p), 6s segments
+- **Video Player**: HLS.js — adaptive bitrate, quality selector, resume from progress
 - **Transcription**: AssemblyAI or OpenAI Whisper
 - **AI Engine**: Claude API (claude-sonnet) — recommendations, tagging, summaries, devotionals
 - **Embeddings**: pgvector in PostgreSQL — semantic search

@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Home, Play, Heart, Layers, Mic, GraduationCap, Smile, Bookmark, Clock, FileText, TrendingUp } from 'lucide-react';
+import { Home, Play, Heart, Layers, Mic, GraduationCap, Smile, Bookmark, Clock, FileText, TrendingUp, FileCheck, Handshake } from 'lucide-react';
 import { useAuth } from '@/lib/use-auth';
 
 const mainNav = [
@@ -19,6 +19,8 @@ const libraryNav = [
   { name: 'Bookmarks', href: '/bookmarks', icon: Bookmark },
   { name: 'Watch history', href: '/history', icon: Clock },
   { name: 'My notes', href: '/notes', icon: FileText },
+  { name: 'Service Notes', href: '/service-notes', icon: FileCheck },
+  { name: 'Ministry Guide', href: '/ministry-guide', icon: Handshake },
   { name: 'Growth', href: '/growth', icon: TrendingUp },
 ];
 

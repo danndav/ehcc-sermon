@@ -8,17 +8,17 @@ interface SermonCardProps {
   title: string;
   pastor: string;
   date?: string;
-  duration?: number;
+  duration?: number | null;
   thumbnailUrl?: string | null;
   tags?: string[];
   isFree?: boolean;
   viewCount?: number;
   progress?: number;
   mediaType?: MediaType;
-  programmeType?: ProgrammeType;
+  programmeType?: ProgrammeType | string;
   specialProgrammeName?: string | null;
-  threeDgDay?: 1 | 2 | 3 | null;
-  programmeSession?: ProgrammeSession | null;
+  threeDgDay?: number | null;
+  programmeSession?: ProgrammeSession | string | null;
   variant?: 'grid' | 'list';
 }
 
@@ -32,10 +32,10 @@ const programmeBadgeStyles: Record<string, string> = {
 };
 
 function getProgrammeLabel(
-  programmeType?: ProgrammeType,
+  programmeType?: string,
   specialProgrammeName?: string | null,
-  threeDgDay?: 1 | 2 | 3 | null,
-  programmeSession?: ProgrammeSession | null,
+  threeDgDay?: number | null,
+  programmeSession?: string | null,
 ): string | null {
   if (!programmeType) return null;
 

@@ -2,10 +2,6 @@ import Link from 'next/link';
 import { ArrowLeft, GraduationCap, Users, Video, Headphones, CheckCircle } from 'lucide-react';
 import { MOCK_CLASSES } from '@/lib/mock-data';
 
-export function generateStaticParams() {
-  return MOCK_CLASSES.map((c) => ({ id: c.id }));
-}
-
 export default function ClassDetailPage({ params }: { params: { id: string } }) {
   const cls = MOCK_CLASSES.find((c) => c.id === params.id) || MOCK_CLASSES[0];
   const isMembership = cls.category === 'membership';

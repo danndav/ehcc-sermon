@@ -14,4 +14,7 @@ export class Series extends IEntity {
 
   @Column({ type: 'boolean', default: true, name: 'is_active' })
   isActive: boolean;
+
+  @Column({ type: 'int', nullable: true, name: 'branch_id' })
+  branchId: number | null;
 }

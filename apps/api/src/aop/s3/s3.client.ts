@@ -19,15 +19,19 @@ export class S3Client {
   private buckets: Map<S3BucketNameSuffix, [AWSS3Client, string]> = new Map();
 
   constructor() {
-    this.buckets.set(S3BucketNameSuffix.Assets, this.initS3());
+    const result = this.initS3();
+    if (result) {
+      this.buckets.set(S3BucketNameSuffix.Assets, result);
+    }
   }
 
-  private initS3(): [AWSS3Client, string] {
+  private initS3(): [AWSS3Client, string] | null {
     const region = process.env.AWS_BUCKET_REGION;
     const bucketName = process.env.AWS_ASSETS_BUCKET_NAME;
 
     if (!region || !bucketName) {
-      throw new InternalServerErrorException('AWS_BUCKET_REGION and AWS_ASSETS_BUCKET_NAME must be set');
+      this.logger.warn('AWS_BUCKET_REGION / AWS_ASSETS_BUCKET_NAME not set — S3 client disabled');
+      return null;
     }
 
     const s3 = new AWSS3Client({

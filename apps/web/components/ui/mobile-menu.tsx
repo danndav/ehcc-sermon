@@ -18,6 +18,8 @@ import {
   FileText,
   TrendingUp,
   PlusCircle,
+  FileCheck,
+  Handshake,
   Smile,
   User,
   Settings,
@@ -40,6 +42,8 @@ const libraryNav = [
   { name: 'Bookmarks', href: '/bookmarks', icon: Bookmark },
   { name: 'Watch history', href: '/history', icon: Clock },
   { name: 'My notes', href: '/notes', icon: FileText },
+  { name: 'Service Notes', href: '/service-notes', icon: FileCheck },
+  { name: 'Ministry Guide', href: '/ministry-guide', icon: Handshake },
   { name: 'Growth', href: '/growth', icon: TrendingUp },
 ];
 

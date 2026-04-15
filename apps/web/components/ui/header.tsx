@@ -6,6 +6,8 @@ import { img } from '@/lib/utils';
 import { useAuth } from '@/lib/use-auth';
 import { Search, Menu, User, LogOut, Settings } from 'lucide-react';
 import { MobileMenu } from './mobile-menu';
+import { BranchSelector } from './branch-selector';
+import { ClockInButton } from './clock-in-button';
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -41,6 +43,8 @@ export function Header() {
                 <img src={img("/images/ehcc-logo.png")} alt="EHCC" className="h-6 w-auto" />
               </div>
             </Link>
+
+            <BranchSelector />
           </div>
 
           <div className="flex-1 max-w-md mx-4 hidden md:block">
@@ -58,6 +62,8 @@ export function Header() {
             <Link href="/sermons" className="text-text-tertiary hover:text-text-primary md:hidden">
               <Search size={20} />
             </Link>
+
+            <ClockInButton />
 
             {/* Profile avatar + dropdown */}
             <div className="relative" ref={dropdownRef}>

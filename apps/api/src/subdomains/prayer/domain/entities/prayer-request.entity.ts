@@ -10,7 +10,7 @@ export class PrayerRequest extends IEntity {
   @Column({ type: 'text' })
   content: string;
 
-  @Column({ type: 'enum', enum: PrayerCategoryEnum, default: PrayerCategoryEnum.ALL })
+  @Column({ type: 'enum', enum: PrayerCategoryEnum, default: PrayerCategoryEnum.HEALING })
   category: PrayerCategoryEnum;
 
   @Column({ type: 'boolean', default: true, name: 'is_public' })

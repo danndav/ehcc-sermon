@@ -10,17 +10,26 @@ export const checkAuthenticationToken = async (
   const authHeader = request.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    next(new UnauthorizedException('Unauthorized'));
+    return next(new UnauthorizedException('Unauthorized'));
   }
 
-  const token = authHeader?.split(' ')[1];
+  const token = authHeader.split(' ')[1];
 
   try {
     const SECRET_KEY = process.env.JWT_SECRET || 'your-secret-key';
-    const decodedToken = jwt.verify(token!, SECRET_KEY);
+    const decodedToken = jwt.verify(token, SECRET_KEY) as any;
     response.locals.decodedToken = decodedToken;
+    // Set user for context middlewares (they read response.locals.user)
+    response.locals.user = {
+      id: decodedToken.sub,
+      eaNumber: decodedToken.eaNumber,
+      email: decodedToken.email,
+      role: decodedToken.role,
+    };
+    // Set on request for auth guard and roles guard
+    (request as any).currentUser = decodedToken;
     next();
   } catch (error) {
-    next(new UnauthorizedException('Invalid Token'));
+    return next(new UnauthorizedException('Invalid Token'));
   }
 }

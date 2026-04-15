@@ -46,12 +46,26 @@ export class UserRepository {
     return (result.affected ?? 0) > 0;
   }
 
-  async findAndCount(page = 1, limit = 20): Promise<[User[], number]> {
-    return this.repository.findAndCount({
-      order: { createdAt: 'DESC' },
-      skip: (page - 1) * limit,
-      take: limit,
-    });
+  async findAndCount(page = 1, limit = 20, options?: { search?: string; role?: string }): Promise<[User[], number]> {
+    const qb = this.repository.createQueryBuilder('user');
+
+    if (options?.search) {
+      const search = `%${options.search.toLowerCase()}%`;
+      qb.andWhere(
+        '(LOWER(user.name) LIKE :search OR LOWER(user.email) LIKE :search OR LOWER(user.eaNumber) LIKE :search)',
+        { search },
+      );
+    }
+
+    if (options?.role) {
+      qb.andWhere('user.role = :role', { role: options.role });
+    }
+
+    qb.orderBy('user.createdAt', 'DESC')
+      .skip((page - 1) * limit)
+      .take(limit);
+
+    return qb.getManyAndCount();
   }
 
   async findByRole(role: string, page = 1, limit = 20): Promise<[User[], number]> {
